@@ -2,6 +2,9 @@ import Header from "../components/Header";
 import Container from "../components/Container";
 import Card from "../components/Card";
 import { assets } from "../lib/assets";
+import AssetTable from "../components/AssetTable";
+import AssetPieChart from "../components/AssetPieChart";
+import NetWorthLineChart from "../components/NetWorthLineChart";
 
 export default function DashboardPage() {
   const netWorth = assets.reduce(
@@ -34,6 +37,19 @@ export default function DashboardPage() {
           </p>
         </Card>
       </div>
+      <AssetTable assets={assets} />
+      <div className="p-6">
+  <Card title="Asset Distribution">
+    <AssetPieChart />
+  </Card>
+</div>
+<div className="p-6">
+  <Card title="Net Worth Trend">
+    <NetWorthLineChart />
+  </Card>
+</div>
+
+
     </Container>
   );
 }
