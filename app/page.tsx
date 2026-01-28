@@ -1,9 +1,14 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold">
-        Financial Asset Tracking Platform
-      </h1>
+      <Link
+        href="/dashboard"
+        className="px-6 py-3 rounded-lg bg-black text-white"
+      >
+        Go to Dashboard
+      </Link>
     </main>
   );
 }
