@@ -14,7 +14,7 @@ export default function Sidebar() {
             Assets
           </Link>
   
-          <Link href="#" className="block hover:text-zinc-300">
+          <Link href="/report" className="block hover:text-zinc-300">
             Reports
           </Link>
         </nav>
