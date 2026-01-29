@@ -1,5 +1,6 @@
 import "./globals.css";
 import Sidebar from "./components/Sidebar";
+import { AssetProvider } from "./context/AssetContext";
 
 export default function RootLayout({
   children,
@@ -9,8 +10,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex">
-        <Sidebar />
-        {children}
+        <AssetProvider>
+          <Sidebar />
+          {children}
+        </AssetProvider>
       </body>
     </html>
   );

@@ -1,21 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useAssets } from "../context/AssetContext";
 
-type Asset = {
-  id: number;
-  name: string;
-  type: "cash" | "stock" | "crypto";
-  value: number;
-};
+export default function AddAssetForm() {
+  const { setAssets } = useAssets();
 
-type Props = {
-  onAddAsset: React.Dispatch<React.SetStateAction<Asset[]>>;
-};
-
-export default function AddAssetForm({ onAddAsset }: Props) {
   const [name, setName] = useState("");
-  const [type, setType] = useState<Asset["type"]>("cash");
+  const [type, setType] = useState<"cash" | "stock" | "crypto">("cash");
   const [value, setValue] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -23,7 +15,7 @@ export default function AddAssetForm({ onAddAsset }: Props) {
 
     if (!name || !value) return;
 
-    onAddAsset((prev) => [
+    setAssets((prev) => [
       ...prev,
       {
         id: Date.now(),
@@ -33,26 +25,30 @@ export default function AddAssetForm({ onAddAsset }: Props) {
       },
     ]);
 
-    // Reset form
+    // reset form
     setName("");
-    setType("cash");
     setValue("");
+    setType("cash");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-wrap gap-3"
+    >
       <input
-        type="text"
+        className="bg-zinc-800 px-3 py-2 rounded-md text-sm outline-none"
         placeholder="Asset name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="w-full rounded bg-gray-900 border border-gray-700 px-3 py-2 text-sm"
       />
 
       <select
+        className="bg-zinc-800 px-3 py-2 rounded-md text-sm outline-none"
         value={type}
-        onChange={(e) => setType(e.target.value as Asset["type"])}
-        className="w-full rounded bg-gray-900 border border-gray-700 px-3 py-2 text-sm"
+        onChange={(e) =>
+          setType(e.target.value as "cash" | "stock" | "crypto")
+        }
       >
         <option value="cash">Cash</option>
         <option value="stock">Stock</option>
@@ -61,15 +57,15 @@ export default function AddAssetForm({ onAddAsset }: Props) {
 
       <input
         type="number"
+        className="bg-zinc-800 px-3 py-2 rounded-md text-sm outline-none"
         placeholder="Value (¥)"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="w-full rounded bg-gray-900 border border-gray-700 px-3 py-2 text-sm"
       />
 
       <button
         type="submit"
-        className="w-full rounded bg-white text-black py-2 text-sm font-medium hover:bg-gray-200"
+        className="bg-white text-black px-4 py-2 rounded-md text-sm font-medium hover:opacity-90"
       >
         Add Asset
       </button>

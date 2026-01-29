@@ -1,71 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import Container from "../components/Container";
-import Header from "../components/Header";
-import Card from "../components/Card";
 import AddAssetForm from "../components/AddAssetForm";
-import { assets as initialAssets } from "../lib/assets";
-
-type Asset = {
-  id: number;
-  name: string;
-  type: "cash" | "stock" | "crypto";
-  value: number;
-};
+import Card from "../components/Card";
+import Container from "../components/Container";
+import { useAssets } from "../context/AssetContext";
 
 export default function AssetsPage() {
-  const [assets, setAssets] = useState<Asset[]>(initialAssets);
+  const { assets, setAssets } = useAssets();
 
-  const handleDelete = (id: number) => {
+  const deleteAsset = (id: number) => {
     setAssets((prev) => prev.filter((asset) => asset.id !== id));
   };
 
   return (
     <Container>
-      <Header />
+      <h1 className="text-2xl font-semibold mb-6">Assets</h1>
 
-      <div className="p-6 space-y-6">
-        {/* Add Asset */}
-        <Card title="Add Asset">
-          <AddAssetForm onAddAsset={setAssets} />
-        </Card>
+      <AddAssetForm />
 
-        {/* Assets List */}
-        <Card title="Your Assets">
-          {assets.length === 0 ? (
-            <p className="text-gray-400">No assets added yet.</p>
-          ) : (
-            <div className="space-y-4">
-              {assets.map((asset) => (
-                <div
-                  key={asset.id}
-                  className="flex justify-between items-center border-b border-gray-700 pb-2"
-                >
-                  <div>
-                    <p className="font-medium">{asset.name}</p>
-                    <p className="text-sm text-gray-400 capitalize">
-                      {asset.type}
-                    </p>
-                  </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+        {assets.map((asset) => (
+          <Card key={asset.id} title={asset.name}>
+            <p className="text-sm text-gray-400 capitalize">{asset.type}</p>
+            <p className="text-xl font-semibold mt-2">
+              ¥{asset.value.toLocaleString()}
+            </p>
 
-                  <div className="flex items-center gap-4">
-                    <p className="font-semibold">
-                      ¥{asset.value.toLocaleString()}
-                    </p>
-
-                    <button
-                      onClick={() => handleDelete(asset.id)}
-                      className="text-red-400 hover:text-red-300 text-sm"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </Card>
+            <button
+              onClick={() => deleteAsset(asset.id)}
+              className="mt-4 text-sm text-red-400 hover:text-red-500"
+            >
+              Delete
+            </button>
+          </Card>
+        ))}
       </div>
     </Container>
   );
