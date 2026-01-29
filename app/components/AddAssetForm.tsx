@@ -2,68 +2,74 @@
 
 import { useState } from "react";
 
-export default function AddAssetForm({ onAddAsset }) {
+type Asset = {
+  id: number;
+  name: string;
+  type: "cash" | "stock" | "crypto";
+  value: number;
+};
+
+type Props = {
+  onAddAsset: React.Dispatch<React.SetStateAction<Asset[]>>;
+};
+
+export default function AddAssetForm({ onAddAsset }: Props) {
   const [name, setName] = useState("");
-  const [type, setType] = useState("cash");
+  const [type, setType] = useState<Asset["type"]>("cash");
   const [value, setValue] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name || !value) return;
 
-    const newAsset = {
-      id: Date.now(),
-      name,
-      type,
-      value: Number(value),
-    };
+    onAddAsset((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        name,
+        type,
+        value: Number(value),
+      },
+    ]);
 
-    onAddAsset((prev) => [...prev, newAsset]);
-
+    // Reset form
     setName("");
+    setType("cash");
     setValue("");
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm mb-1">Asset Name</label>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full rounded bg-gray-800 p-2"
-          placeholder="Savings Account"
-        />
-      </div>
+      <input
+        type="text"
+        placeholder="Asset name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="w-full rounded bg-gray-900 border border-gray-700 px-3 py-2 text-sm"
+      />
 
-      <div>
-        <label className="block text-sm mb-1">Asset Type</label>
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="w-full rounded bg-gray-800 p-2"
-        >
-          <option value="cash">Cash</option>
-          <option value="stock">Stock</option>
-          <option value="crypto">Crypto</option>
-        </select>
-      </div>
+      <select
+        value={type}
+        onChange={(e) => setType(e.target.value as Asset["type"])}
+        className="w-full rounded bg-gray-900 border border-gray-700 px-3 py-2 text-sm"
+      >
+        <option value="cash">Cash</option>
+        <option value="stock">Stock</option>
+        <option value="crypto">Crypto</option>
+      </select>
 
-      <div>
-        <label className="block text-sm mb-1">Value (¥)</label>
-        <input
-          type="number"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          className="w-full rounded bg-gray-800 p-2"
-          placeholder="100000"
-        />
-      </div>
+      <input
+        type="number"
+        placeholder="Value (¥)"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="w-full rounded bg-gray-900 border border-gray-700 px-3 py-2 text-sm"
+      />
 
       <button
         type="submit"
-        className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded"
+        className="w-full rounded bg-white text-black py-2 text-sm font-medium hover:bg-gray-200"
       >
         Add Asset
       </button>
