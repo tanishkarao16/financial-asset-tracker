@@ -10,7 +10,7 @@ export default function Sidebar() {
             Dashboard
           </Link>
   
-          <Link href="#" className="block hover:text-zinc-300">
+          <Link href="/assets" className="block hover:text-zinc-300">
             Assets
           </Link>
   
