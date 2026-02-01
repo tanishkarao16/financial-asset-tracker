@@ -1,54 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { useAssets } from "../context/AssetContext";
+import { addAsset } from "../actions/assetActions";
 
 export default function AddAssetForm() {
-  const { setAssets } = useAssets();
-
-  const [name, setName] = useState("");
-  const [type, setType] = useState<"cash" | "stock" | "crypto">("cash");
-  const [value, setValue] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!name || !value) return;
-
-    setAssets((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        name,
-        type,
-        value: Number(value),
-      },
-    ]);
-
-    // reset form
-    setName("");
-    setValue("");
-    setType("cash");
-  };
-
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-wrap gap-3"
-    >
+    <form action={addAsset} className="space-y-4">
       <input
-        className="bg-zinc-800 px-3 py-2 rounded-md text-sm outline-none"
+        name="name"
         placeholder="Asset name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        className="w-full p-2 rounded bg-zinc-800"
+        required
       />
 
       <select
-        className="bg-zinc-800 px-3 py-2 rounded-md text-sm outline-none"
-        value={type}
-        onChange={(e) =>
-          setType(e.target.value as "cash" | "stock" | "crypto")
-        }
+        name="type"
+        className="w-full p-2 rounded bg-zinc-800"
+        required
       >
         <option value="cash">Cash</option>
         <option value="stock">Stock</option>
@@ -56,17 +23,14 @@ export default function AddAssetForm() {
       </select>
 
       <input
+        name="value"
         type="number"
-        className="bg-zinc-800 px-3 py-2 rounded-md text-sm outline-none"
-        placeholder="Value (¥)"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        placeholder="Value"
+        className="w-full p-2 rounded bg-zinc-800"
+        required
       />
 
-      <button
-        type="submit"
-        className="bg-white text-black px-4 py-2 rounded-md text-sm font-medium hover:opacity-90"
-      >
+      <button className="bg-white text-black px-4 py-2 rounded">
         Add Asset
       </button>
     </form>
